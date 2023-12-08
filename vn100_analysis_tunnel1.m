@@ -111,7 +111,7 @@ plot(X,Y,'r--')
 plot(corr_ellipse(1,:),corr_ellipse(2,:),'g--')
 xlabel('X-Axis'), ylabel('Y-Axis')
 legend('Uncorrect Data', 'Corrected Data', 'Uncorrected Ellipse','Corrected Ellipse')
-title('Corrected and Uncorrected Magnetometer Data'), fontname('Times New Roman'), grid on, axis equal, axis padded
+%title('Corrected and Uncorrected Magnetometer Data'), fontname('Times New Roman'), grid on, axis equal, axis padded
 
 %% Sensor Fusion
 
@@ -132,7 +132,7 @@ plot(corr_ellipse(1,:),corr_ellipse(2,:),'g--')
 plot(X,Y,'r--')
 xlabel('X-Axis'), ylabel('Y-Axis')
 legend('Uncorrect Data', 'Corrected Data', 'Uncorrected Ellipse','Corrected Ellipse')
-title('Corrected and Uncorrected Magnetometer Data'), fontname('Times New Roman'), grid on, axis equal, axis padded
+%title('Corrected and Uncorrected Magnetometer Data'), fontname('Times New Roman'), grid on, axis equal, axis padded
 
 figure(3)
 hold on
@@ -142,7 +142,7 @@ xlabel('Time Series (s)')
 ylabel(['Yaw Angle (' char(176) ')'])
 title('Raw and Calibrated Magnetometer Yaw Angle')
 legend('Raw Magnetometer Yaw','Calibrated Magnetometer Yaw')
-fontname('Times New Roman')
+%fontname('Times New Roman')
 grid on
 
 % Integrate Angular Rate to get Yaw Angle
@@ -165,7 +165,7 @@ xlabel('Time Series (s)')
 ylabel(['Yaw Angle (' char(176) ')'])
 title('Yaw from Integrated Angular Rate')
 grid on
-fontname('Times New Roman')
+%fontname('Times New Roman')
 
 % Apply Low Pass Filter to Magnetometer Data
 fs = 1/mean(diff(tunnel1_times));
@@ -189,7 +189,7 @@ ylabel(['Yaw Angle (' char(176) ')'])
 legend('Unfiltered','Filtered')
 title('Yaw from Calibrated Magnetometer Data')
 grid on
-fontname('Times New Roman')
+%fontname('Times New Roman')
 subplot(2,1,2)
 hold on
 plot(tunnel1_times,gyro_yaw, '-r','LineWidth',1')
@@ -199,7 +199,7 @@ ylabel(['Yaw Angle (' char(176) ')'])
 legend('Unfiltered','Filtered')
 title('Yaw from Integrated Angular Rate Data')
 grid on
-fontname('Times New Roman')
+%fontname('Times New Roman')
 
 % Apply Complimentary Filter
 alpha = 0.9;
@@ -225,7 +225,7 @@ ylabel(['Yaw Angle (' char(176) ')'])
 legend('Complimentary Filter','High Pass Filter - Gyro. Data','Low Pass Filter - Mag. Data', 'VN-100 Yaw')
 title('Yaw Angle with Low Pass, High Pass and Complimentary Filter Compared to IMU Yaw')
 grid on
-fontname('Times New Roman')
+%fontname('Times New Roman')
 
 %% Forward Velocity Estimate
 
@@ -255,7 +255,7 @@ xlabel('Time Series (s)')
 ylabel('Velocity (m/s)')
 legend('Uncorrected','Acceleration Correction Applied','Velocity Correction Applied','Location','northwest')
 title('Corrected and Uncorrected Velocity Estimate from Integrated Forward Acceleration')
-fontname('Times New Roman')
+%fontname('Times New Roman')
 grid on
 axis padded
 
@@ -266,7 +266,7 @@ plot(tunnel1_times, forward_vel,'-m','LineWidth',1)
 xlabel('Time Series (s)')
 ylabel('Velocity (m/s)')
 title('Velocity Estimate from Integrated Forward Acceleration')
-fontname('Times New Roman')
+%fontname('Times New Roman')
 grid on
 subplot(2,1,2)
 hold on
@@ -274,7 +274,7 @@ plot(tunnel1_gps_time(1:20),gps_vel,'-b','LineWidth',1)
 xlabel('Time Series (s)')
 ylabel('Velocity (m/s)')
 title('Velocity Estimate from GPS')
-fontname('Times New Roman')
+%fontname('Times New Roman')
 grid on
 
 %% Dead Reckoning 
@@ -297,14 +297,14 @@ plot(tunnel1_times,imu_displacement,'m-','LineWidth',1)
 xlabel('Time Series (s)')
 ylabel('Displacement (m)')
 title('Displacement Estimate from IMU')
-fontname('Times New Roman')
+%fontname('Times New Roman')
 grid on
 subplot(2,1,2)
 plot(tunnel1_gps_time(1:20), gps_displacement,'b-','LineWidth',1)
 xlabel('Time Series (s)')
 ylabel('Displacement (m)')
 title('Displacement Estimate from GPS')
-fontname('Times New Roman')
+%fontname('Times New Roman')
 grid on
 
 % Calculate omega*velocity
@@ -322,7 +322,7 @@ legend('\omega x','y_{obs}')
 xlabel('Time Series (s)')
 ylabel('Acceleration (m/s^{2})')
 title('Y-Axis Acceleration - Uncorrected and Unfiltered')
-fontname('Times New Roman')
+%fontname('Times New Roman')
 grid on
 subplot(3,1,2)
 hold on
@@ -332,7 +332,7 @@ legend('\omega x','y_{obs}')
 xlabel('Time Series (s)')
 ylabel('Acceleration (m/s^{2})')
 title('Y-Axis Acceleration - Corrected and Unfiltered')
-fontname('Times New Roman')
+%fontname('Times New Roman')
 grid on
 subplot(3,1,3)
 hold on
@@ -342,7 +342,7 @@ legend('\omega x','y_{obs}')
 xlabel('Time Series (s)')
 ylabel('Acceleration (m/s^{2})')
 title('Y-Axis Acceleration - Corrected and Filtered')
-fontname('Times New Roman')
+%fontname('Times New Roman')
 grid on
 
 %% Trajectory Estimation
@@ -365,5 +365,267 @@ xlabel('Easting (m)')
 ylabel('Northing (m)')
 legend('GPS Trajectory','IMU Trajectory','Location','northwest')
 title('IMU and GPS Easting anf Northing Trajectories')
-fontname('Times New Roman')
+%fontname('Times New Roman')
 grid on
+
+%% Extract second IMU
+% Load data from the second IMU (MPU9250)
+second_imu_data = readtable('tunnel_mpu9250.csv');
+
+% Extract relevant columns
+acceleration_second = [second_imu_data.Accel_x, second_imu_data.Accel_y, second_imu_data.Accel_z];
+gyro_second = [second_imu_data.Gyro_x, second_imu_data.Gyro_y, second_imu_data.Gyro_z];
+mag_second = [second_imu_data.Mag_x, second_imu_data.Mag_y, second_imu_data.Mag_z];
+
+% Convert Magnetometer Units to Gauss
+mag_second = mag_second / 10000;
+
+% Assuming you have a constant sampling rate (replace 100 with your actual sampling rate)
+sampling_rate_second = 100;
+time_difference_second = 1 / sampling_rate_second;
+timestamps_second = (0:(height(second_imu_data)-1)) * time_difference_second;
+
+% Extract Magnetometer Data from Second IMU
+x_second = mag_second(:,1); % Extract x and y data for readability
+y_second = mag_second(:,2);
+
+% Correct Raw Magnetometer data for the second IMU
+sigma_second = min_ax / maj_ax;
+S1_second = sigma_second * cos(-theta) * cos(theta) - sin(-theta) * sin(theta);
+S2_second = sigma_second * cos(-theta) * sin(theta) + sin(-theta) * cos(theta);
+S3_second = -sigma_second * sin(-theta) * cos(theta) - cos(-theta) * sin(theta);
+S4_second = -sigma_second * sin(-theta) * sin(theta) + cos(-theta) * cos(theta);
+S_second = [S1_second, S2_second; S3_second, S4_second];
+
+t_second = 0:pi/10:2*pi;
+X_second = center_x + (maj_ax * cos(t_second) * cos(theta) - min_ax * sin(t_second) * sin(theta));
+Y_second = center_y + (maj_ax * cos(t_second) * sin(theta) + min_ax * sin(t_second) * cos(theta));
+corr_ellipse_second = S_second * ([X_second; Y_second] - [center_x; center_y]);
+
+%% Sensor Fusion for Second IMU
+
+% Raw Magnetometer Yaw Angle for Second IMU
+tunnel1_mag_yaw_second = (180/pi) * atan2(x_second, y_second);
+
+% Corrected Magnetometer Yaw Angle for Second IMU
+%corr_mag_second = S * ([second_imu_data.Mag_x; second_imu_data.Mag_y] - [center_x; center_y]);
+corr_mag_second = S_second * ([x_second y_second]' - [center_x; center_y]);
+corr_mag_yaw_second = (180/pi) * atan2(corr_mag_second(1,:), corr_mag_second(2,:));
+corr_mag_yaw_second = wrapTo180(corr_mag_yaw_second);
+
+% Plot Raw and Corrected Magnetometer Yaw for Second IMU
+figure(12)
+hold on
+scatter(second_imu_data.Mag_x, second_imu_data.Mag_y, 'r*')
+scatter(corr_mag_second(1,:), corr_mag_second(2,:), 'g*')
+plot(x_second, y_second, 'r--')
+plot(corr_ellipse_second(1,:), corr_ellipse_second(2,:), 'g--')
+xlabel('X-Axis'), ylabel('Y-Axis')
+legend('Uncorrected Data', 'Corrected Data', 'Uncorrected Ellipse', 'Corrected Ellipse')
+title('Magnetometer Calibration for Second IMU')
+grid on
+
+% Plot Raw and Corrected Magnetometer Yaw for Second IMU
+figure(13)
+hold on
+plot(timestamps_second, tunnel1_mag_yaw_second, 'r-', 'LineWidth', 1)
+plot(timestamps_second, corr_mag_yaw_second, 'g-', 'LineWidth', 1)
+xlabel('Time Series (s)')
+ylabel(['Yaw Angle (' char(176) ')'])
+title('Raw and Calibrated Magnetometer Yaw Angle for Second IMU')
+legend('Raw Magnetometer Yaw', 'Calibrated Magnetometer Yaw')
+grid on
+
+% Integrate Angular Rate to get Yaw Angle for Second IMU
+gyro_yaw_second = cumtrapz(timestamps_second, gyro_second(:,3));
+% Ensure Yaw Angle is between +-180
+gyro_yaw_second = (180/pi) * wrapToPi(gyro_yaw_second);
+
+% Plot Magnetometer Yaw and Gyro Yaw for Second IMU
+figure(14)
+subplot(2,1,1)
+hold on
+plot(timestamps_second, corr_mag_yaw_second, 'm-', 'LineWidth', 1)
+xlabel('Time Series (s)')
+ylabel(['Yaw Angle (' char(176) ')'])
+title('Yaw from Calibrated Magnetometer Data for Second IMU')
+grid on
+subplot(2,1,2)
+plot(timestamps_second, gyro_yaw_second, 'b-', 'LineWidth', 1)
+xlabel('Time Series (s)')
+ylabel(['Yaw Angle (' char(176) ')'])
+title('Yaw from Integrated Angular Rate for Second IMU')
+grid on
+
+% Apply Low Pass Filter to Magnetometer Data for Second IMU
+fs_second = 1 / mean(diff(timestamps_second));
+filtered_mag_yaw_second = lowpass(corr_mag_yaw_second, 0.1, fs_second);
+
+% Apply High Pass Filter to Gyro Data for Second IMU
+[b_second, a_second] = butter(1, 0.004/(0.5/fs_second), 'high');
+filtered_gyro_rate_second = filtfilt(b_second, a_second, gyro_second(:,3));
+filtered_gyro_yaw_second = cumtrapz(timestamps_second, filtered_gyro_rate_second);
+filtered_gyro_yaw_second = (180/pi) * wrapToPi(filtered_gyro_yaw_second);
+
+% Plot Filtered Yaw Angles for Second IMU
+figure(15)
+subplot(2,1,1)
+hold on
+plot(timestamps_second, corr_mag_yaw_second, '-r', 'LineWidth', 1)
+plot(timestamps_second, filtered_mag_yaw_second, '-g', 'LineWidth', 1)
+xlabel('Time Series (s)')
+ylabel(['Yaw Angle (' char(176) ')'])
+legend('Unfiltered', 'Filtered')
+title('Yaw from Calibrated Magnetometer Data for Second IMU')
+grid on
+subplot(2,1,2)
+hold on
+plot(timestamps_second, gyro_yaw_second, '-r', 'LineWidth', 1)
+plot(timestamps_second, filtered_gyro_yaw_second, '-g', 'LineWidth', 1)
+xlabel('Time Series (s)')
+ylabel(['Yaw Angle (' char(176) ')'])
+legend('Unfiltered', 'Filtered')
+title('Yaw from Integrated Angular Rate Data for Second IMU')
+grid on
+
+% Apply Complimentary Filter for Second IMU
+alpha_second = 0.9;
+filtered_yaw_second = alpha_second * filtered_mag_yaw_second' + (1 - alpha_second) * gyro_yaw_second;
+
+% True Yaw Angle for the second IMU
+x_second = second_imu_data.Roll; % Assuming Roll corresponds to x-axis in quaternion
+y_second = second_imu_data.Pitch; % Assuming Pitch corresponds to y-axis in quaternion
+z_second = second_imu_data.Yaw; % Assuming Yaw corresponds to z-axis in quaternion
+w_second = zeros(size(x_second)); % Assuming w is not available in the provided data
+
+yaw_second = zeros(size(x_second));
+for i = 1:length(x_second)
+    yaw_second(i) = (180/pi) * atan2(2*(w_second(i)*z_second(i)+x_second(i)*y_second(i)),1-2*(y_second(i)*y_second(i)+z_second(i)*z_second(i)));
+end
+
+figure(16)
+hold on
+plot(timestamps_second, filtered_yaw_second, '-g', 'LineWidth', 1)
+plot(timestamps_second, filtered_gyro_yaw_second, '-b', 'LineWidth', 1)
+plot(timestamps_second, filtered_mag_yaw_second, '-m', 'LineWidth', 1)
+plot(timestamps_second, yaw_second, 'k-', 'LineWidth', 1)
+xlabel('Time Series (s)')
+ylabel(['Yaw Angle (' char(176) ')'])
+legend('Complimentary Filter', 'High Pass Filter - Gyro. Data', 'Low Pass Filter - Mag. Data', 'Second IMU Yaw')
+title('Yaw Angle with Low Pass, High Pass and Complimentary Filter Compared to Second IMU Yaw')
+grid on
+
+%% Forward Velocity Estimate for the Second IMU
+
+% Integrate Forward Acceleration to get an Estimate for Forward Velocity
+raw_vel_x_second = cumtrapz(timestamps_second, second_imu_data.Accel_x);
+vel_x_second = cumtrapz(timestamps_second, second_imu_data.Accel_x - mean(second_imu_data.Accel_x));
+vel_y_second = cumtrapz(timestamps_second, second_imu_data.Accel_y - mean(second_imu_data.Accel_y));
+
+% Correct Velocity Data
+forward_vel_second = detrend(vel_x_second);
+forward_vel_second = 0.2 * abs(forward_vel_second);
+
+% Estimate Velocity From GPS Data (Assuming similar data structure as the first part)
+d_lat_second = diff(tunnel1_utmnorth);
+d_long_second = diff(tunnel1_utmeast);
+dx_second = sqrt(d_lat_second.^2 + d_long_second.^2);
+dt_second = diff(tunnel1_gps_time)';
+gps_vel_second = dx_second ./ dt_second;
+
+% Plot Corrected and Uncorrected Velocity from Accel. and Velocity from GPS
+figure(7)
+hold on
+plot(timestamps_second, raw_vel_x_second, '-r','LineWidth',1)
+plot(timestamps_second, vel_x_second, '-y','LineWidth',1)
+plot(timestamps_second, forward_vel_second,'-g','LineWidth',1)
+xlabel('Time Series (s)')
+ylabel('Velocity (m/s)')
+legend('Uncorrected','Acceleration Correction Applied','Velocity Correction Applied','Location','northwest')
+title('Corrected and Uncorrected Velocity Estimate from Integrated Forward Acceleration (Second IMU)')
+grid on
+axis padded
+
+figure(8)
+subplot(2,1,1)
+hold on
+plot(timestamps_second, forward_vel_second,'-m','LineWidth',1)
+xlabel('Time Series (s)')
+ylabel('Velocity (m/s)')
+title('Velocity Estimate from Integrated Forward Acceleration (Second IMU)')
+grid on
+
+subplot(2,1,2)
+hold on
+plot(tunnel1_gps_time(1:20), gps_vel_second, '-b','LineWidth',1)
+xlabel('Time Series (s)')
+ylabel('Velocity (m/s)')
+title('Velocity Estimate from GPS (Second IMU)')
+grid on
+
+%% Dead Reckoning for the Second IMU
+
+% Integrate Forward Velocity to get an Estimate for Displacement
+imu_displacement_second = cumtrapz(timestamps_second, forward_vel_second);
+
+% Scale UTM Northing and Easting
+tunnel1_utmnorth_second = tunnel1_utmnorth - tunnel1_utmnorth(1);
+tunnel1_utmeast_second = tunnel1_utmeast - tunnel1_utmeast(1);
+
+% GPS Displacement (Assuming similar data structure as the first part)
+gps_displacement_second = cumtrapz(tunnel1_gps_time(1:length(gps_vel_second)), gps_vel_second);
+
+% Plot GPS and IMU Displacement over time
+figure(9)
+hold on 
+subplot(2,1,1)
+plot(timestamps_second, imu_displacement_second, 'm-', 'LineWidth', 1)
+xlabel('Time Series (s)')
+ylabel('Displacement (m)')
+title('Displacement Estimate from IMU (Second IMU)')
+grid on
+
+subplot(2,1,2)
+plot(tunnel1_gps_time(1:20), gps_displacement_second, 'b-', 'LineWidth', 1)
+xlabel('Time Series (s)')
+ylabel('Displacement (m)')
+title('Displacement Estimate from GPS (Second IMU)')
+grid on
+
+% Calculate omega*velocity
+vel_x_second = cumtrapz(timestamps_second, second_imu_data.Accel_x);
+omega_xdot_second = second_imu_data.Gyro_z .* vel_x_second;
+corr_omega_xdot_second = second_imu_data.Gyro_z .* forward_vel_second;
+y_obs_second = lowpass(second_imu_data.Accel_y, 0.01, fs);
+
+figure(10)
+subplot(3,1,1)
+hold on
+plot(timestamps_second, omega_xdot_second, '-b', 'LineWidth', 1)
+plot(timestamps_second, second_imu_data.Accel_y, '-m', 'LineWidth', 1)
+legend('\omega x', 'y_{obs}')
+xlabel('Time Series (s)')
+ylabel('Acceleration (m/s^{2})')
+title('Y-Axis Acceleration - Uncorrected and Unfiltered (Second IMU)')
+grid on
+
+subplot(3,1,2)
+hold on
+plot(timestamps_second, corr_omega_xdot_second, '-b', 'LineWidth', 1)
+plot(timestamps_second, second_imu_data.Accel_y, '-m', 'LineWidth', 1)
+legend('\omega x', 'y_{obs}')
+xlabel('Time Series (s)')
+ylabel('Acceleration (m/s^{2})')
+title('Y-Axis Acceleration - Corrected and Unfiltered (Second IMU)')
+grid on
+
+subplot(3,1,3)
+hold on
+plot(timestamps_second, corr_omega_xdot_second, '-b', 'LineWidth', 1)
+plot(timestamps_second, y_obs_second, '-m', 'LineWidth', 1)
+legend('\omega x', 'y_{obs}')
+xlabel('Time Series (s)')
+ylabel('Acceleration (m/s^{2})')
+title('Y-Axis Acceleration - Corrected and Filtered (Second IMU)')
+grid on
+
