@@ -534,7 +534,7 @@ dt_second = diff(tunnel1_gps_time)';
 gps_vel_second = dx_second ./ dt_second;
 
 % Plot Corrected and Uncorrected Velocity from Accel. and Velocity from GPS
-figure(7)
+figure(17)
 hold on
 plot(timestamps_second, raw_vel_x_second, '-r','LineWidth',1)
 plot(timestamps_second, vel_x_second, '-y','LineWidth',1)
@@ -546,7 +546,7 @@ title('Corrected and Uncorrected Velocity Estimate from Integrated Forward Accel
 grid on
 axis padded
 
-figure(8)
+figure(18)
 subplot(2,1,1)
 hold on
 plot(timestamps_second, forward_vel_second,'-m','LineWidth',1)
@@ -576,7 +576,7 @@ tunnel1_utmeast_second = tunnel1_utmeast - tunnel1_utmeast(1);
 gps_displacement_second = cumtrapz(tunnel1_gps_time(1:length(gps_vel_second)), gps_vel_second);
 
 % Plot GPS and IMU Displacement over time
-figure(9)
+figure(19)
 hold on 
 subplot(2,1,1)
 plot(timestamps_second, imu_displacement_second, 'm-', 'LineWidth', 1)
@@ -598,7 +598,7 @@ omega_xdot_second = second_imu_data.Gyro_z .* vel_x_second;
 corr_omega_xdot_second = second_imu_data.Gyro_z .* forward_vel_second;
 y_obs_second = lowpass(second_imu_data.Accel_y, 0.01, fs);
 
-figure(10)
+figure(20)
 subplot(3,1,1)
 hold on
 plot(timestamps_second, omega_xdot_second, '-b', 'LineWidth', 1)
@@ -629,3 +629,29 @@ ylabel('Acceleration (m/s^{2})')
 title('Y-Axis Acceleration - Corrected and Filtered (Second IMU)')
 grid on
 
+%% Trajectory Estimation for the Second IMU
+
+heading_second = deg2rad(filtered_mag_yaw_second)' - deg2rad(20);
+delta_t_second = diff(timestamps_second);
+% Transpose delta_t_second to make it a column vector
+delta_t_second = delta_t_second(:);
+
+% Concatenate the vectors vertically
+forward_vel_second = [0; delta_t_second] .* second_imu_data.Accel_x;
+
+forward_vel_second = 10 * forward_vel_second;
+v_easting_second = -forward_vel_second .* cos(heading_second);
+v_northing_second = forward_vel_second .* sin(heading_second);
+
+imu_northing_second = cumtrapz(timestamps_second, v_northing_second);
+imu_easting_second = cumtrapz(timestamps_second, v_easting_second);
+
+figure(21)
+hold on
+plot(tunnel1_utmeast_second, tunnel1_utmnorth_second, '-*', 'LineWidth', 1)
+plot(imu_easting_second, imu_northing_second, 'LineWidth', 1)
+xlabel('Easting (m)')
+ylabel('Northing (m)')
+legend('GPS Trajectory (Second IMU)', 'IMU Trajectory (Second IMU)', 'Location', 'northwest')
+title('IMU and GPS Easting and Northing Trajectories (Second IMU)')
+grid on
