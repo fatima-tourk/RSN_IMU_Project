@@ -192,8 +192,8 @@ end
 
 figure(6)
 hold on
-plot(vn100_times,vn100_yaw,'-c','LineWidth',1)
-plot(mpu9250_timestamps,mpu9250_yaw,'-y','LineWidth',1)
+plot(vn100_times,vn100_yaw,'-m','LineWidth',1)
+plot(mpu9250_timestamps,mpu9250_yaw,'-b','LineWidth',1)
 plot(vn100_times,yaw,'k-','LineWidth',1')
 xlabel('Time Series (s)')
 ylabel(['Yaw Angle (' char(176) ')'])
@@ -213,6 +213,14 @@ vn100_vel_corr = cumtrapz(vn100_times,vn100_accel(:,1) - mean(vn100_accel(:,1)))
 vn100_vel_corr = abs(vn100_vel_corr);
 mpu9250_vel_corr = cumtrapz(mpu9250_timestamps,mpu9250_accel(:,1) - mean(mpu9250_accel(:,1)));
 mpu9250_vel_corr = abs(mpu9250_vel_corr);
+
+% Estimating Velocity from GPS may not be useful since it's GPS denied
+% Estimate Velocity From GPS Data
+% d_lat = diff(utmnorth);
+% d_long = diff(utmeast);
+% dx = sqrt(d_lat.^2 + d_long.^2);
+% dt = diff(gps_time)';
+% gps_vel = dx./dt;
 
 % Plot Corrected and Uncorrected Velocity from Accel. and Velocity from GPS
 figure(7)
@@ -296,9 +304,23 @@ plot(ekf_easting,ekf_northing,'-k','LineWidth',1)
 xlabel('Easting (m)')
 ylabel('Northing (m)')
 legend('GPS Trajectory','VN-100 Complimentary Filter Trajectory','MPU-9250 Complimentary Filter Trajectory','VN-100 EKF Yaw','Location','northwest')
-title('IMU and GPS Easting anf Northing Trajectories')
+title('IMU and GPS Easting and Northing Trajectories')
 fontname('Times New Roman')
 grid on
+axis equal
+
+%% Plot GPS Data for Presentation
+
+figure(10)
+hold on
+scatter(utmeast,utmnorth,'k*','LineWidth',1)
+xlabel('Easting (m)')
+ylabel('Northing (m)')
+title('GPS Easting and Northing - Ted Williams Tunnel')
+fontname('Times New Roman')
+grid on
+axis equal
+axis padded
 
 %% Define Sub-Functions
 
